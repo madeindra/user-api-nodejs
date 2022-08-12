@@ -20,7 +20,7 @@ const jwt = Object.freeze({
 
 // crypt configuration
 const crypt = Object.freeze({
-  rounds: Number(process.env.CRYPT_ROUND) || 10,
+  round: Number(process.env.CRYPT_ROUND) || 10,
 });
 
 module.exports = {
