@@ -1,11 +1,8 @@
-// import jwt
-const jsonwebtoken = require('jsonwebtoken');
+// import dependencies
+const jwt = require('../libs/jwt');
 
-// import configuration
-const { jwt: { secret } } = require('../libslibs/env');
-
-// jwt middleware authorization
-const jwtAuthorization = (req, res, next) => {
+// bearer with jwt middleware authorization
+const bearerAuthorization = (req, res, next) => {
   // read from 'authorization' header
   let token = req.headers['authorization'];
 
@@ -23,7 +20,7 @@ const jwtAuthorization = (req, res, next) => {
 
   try {
     // coba validate token
-    const decoded = jsonwebtoken.verify(token, secret);
+    const decoded = jwt.verify(token);
 
     // inject decoded data to request object
     req.user = decoded;
@@ -36,4 +33,4 @@ const jwtAuthorization = (req, res, next) => {
   }
 }
 
-module.exports = jwtAuthorization;
+module.exports = bearerAuthorization;
