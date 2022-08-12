@@ -15,14 +15,17 @@
   "author": "madeindra",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "helmet": "^5.1.1",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.8.1",
     "pino": "^8.4.0",
-    "pino-http": "^8.2.0"
+    "pino-http": "^8.2.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "jest": "^28.1.3",

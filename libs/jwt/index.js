@@ -1,5 +1,5 @@
 // import configuration
-const { jwt: { secret } } = require('../libslibs/env');
+const { jwt: { secret } } = require('../env');
 
 // import jwt
 const jsonwebtoken = require('jsonwebtoken');

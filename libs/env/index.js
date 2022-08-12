@@ -18,8 +18,14 @@ const jwt = Object.freeze({
   secret: process.env.JWT_SECRET || 'secret',
 });
 
+// crypt configuration
+const crypt = Object.freeze({
+  rounds: Number(process.env.CRYPT_ROUND) || 10,
+});
+
 module.exports = {
   conf,
   db,
   jwt,
+  crypt,
 }
