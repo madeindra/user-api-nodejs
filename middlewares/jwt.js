@@ -2,7 +2,7 @@
 const jsonwebtoken = require('jsonwebtoken');
 
 // import configuration
-const { jwt: { secret } } = require('../configs/env');
+const { jwt: { secret } } = require('../libslibs/env');
 
 // jwt middleware authorization
 const jwtAuthorization = (req, res, next) => {

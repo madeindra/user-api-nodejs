@@ -1,9 +1,9 @@
 // import app
 const app = require('../app');
-const db = require('../configs/db');
+const db = require('../libs/db');
 
 // get port dinamically
-const { conf: { port } } = require('../configs/env');
+const { conf: { port } } = require('../libs/env');
 
 // run
 const server = app.listen(port);
