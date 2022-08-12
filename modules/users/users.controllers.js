@@ -1,16 +1,13 @@
 // import dependencies
 const service = require('./users.services');
-const schema = require('./user.schemas');
+const validation = require('./user.validations');
 
-// import constant
-const { roles: admin } = require('../../libs/constant');
-
-async function registerUser(req, res) {
+async function register(req, res) {
   // deconstruct body
   const { body } = req;
 
   // validate body
-  const { error, value } = schema.register.validate(body);
+  const { error, value } = validation.register.validate(body);
   if (error) {
     return res.status(400).json({
       success: false,
@@ -22,7 +19,7 @@ async function registerUser(req, res) {
   let result
   try {
     result = await service.register(value);
-  } catch(err) {
+  } catch (err) {
     return res.status(500).json({
       success: false,
       message: err.toString(),
@@ -30,38 +27,10 @@ async function registerUser(req, res) {
   }
 
   // return result
-  return res.status(200).json(result);
-}
-
-async function registerAdmin(req, res) {
-  // deconstruct body
-  const { body } = req;
-
-  // validate body
-  const { error, value } = schema.register.validate(body);
-  if (error) {
-    return res.status(400).json({
-      success: false,
-      message: error?.details[0]?.message || 'Bad request.',
-    });
-  }
-
-  // add roles
-  value.roles.push(admin);
-
-  // pass to service
-  let result
-  try {
-    result = await service.register(value);
-  } catch(err) {
-    return res.status(500).json({
-      success: false,
-      message: err.toString(),
-    });
-  }
-
-  // return result
-  return res.status(200).json(result);
+  return res.status(200).json({
+    success: true,
+    message: 'Registration successful.'
+  });
 }
 
 async function login(req, res) {
@@ -69,7 +38,7 @@ async function login(req, res) {
   const { body } = req;
 
   // validate body
-  const { error, value } = schema.login.validate(body);
+  const { error, value } = validation.login.validate(body);
   if (error) {
     return res.status(400).json({
       success: false,
@@ -81,7 +50,7 @@ async function login(req, res) {
   let result
   try {
     result = await service.login(value);
-  } catch(err) {
+  } catch (err) {
     return res.status(500).json({
       success: false,
       message: err.toString(),
@@ -93,7 +62,6 @@ async function login(req, res) {
 }
 
 module.exports = {
-  registerUser,
-  registerAdmin,
+  register,
   login,
 };

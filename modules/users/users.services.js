@@ -1,19 +1,25 @@
 // import dependencies
 const repository = require('./users.repositories');
-const jwt = require('../../libs/jwt');
 const crypt = require('../../libs/crypt');
+const jwt = require('../../libs/jwt');
 const uuid = require('../../libs/uuid');
 
-async function register(object) {
+// import constant
+const { roles: { user, admin } } = require('../../libs/constant');
+
+async function register(data) {
+  // deconstruct
+  const { username, email, password } = data;
+
   // check if email exist
-  if (!object.email) {
+  if (!email) {
     throw new Error('Invalid email.');
   }
 
   let existing;
   try {
-    existing = await repository.findOne({ email: object.email });
-  } catch(err) {
+    existing = await repository.findOne({ email });
+  } catch (err) {
     throw new Error('Database operation failed.')
   }
 
@@ -21,15 +27,22 @@ async function register(object) {
     throw new Error('Email already registered.');
   }
 
-  // hash password
-  object.userId = uuid.generate();
-  object.password = await crypt.hash(object.password);
+  // create user
+  const newUser = {
+    email,
+    username,
+    id: uuid.generate(),
+    roles: [user],
+    password: await crypt.hash(password),
+    isDeleted: false,
+    isVerified: true,
+  };
 
   // add to db
   let result;
   try {
-    result = await repository.insertOne({ ...object });
-  } catch(err) {
+    result = await repository.insertOne({ ...newUser });
+  } catch (err) {
     throw new Error('Database operation failed.')
   }
 
@@ -37,16 +50,19 @@ async function register(object) {
   return result;
 }
 
-async function login(object) {
+async function login(data) {
+  // deconstruct
+  const { email, password } = data;
+
   // check if email exist
-  if (!object.email) {
+  if (!email) {
     throw new Error('Invalid email.');
   }
 
   let existing;
   try {
-    existing = await repository.findOne({ email: object.email }, { _id: 0 });
-  } catch(err) {
+    existing = await repository.findOne({ email }, { _id: 0 });
+  } catch (err) {
     throw new Error('Database operation failed.')
   }
 
@@ -54,19 +70,22 @@ async function login(object) {
     throw new Error('User does not exist.');
   }
 
+  const { id, username, roles, isDeleted, isVerified, password: hashed } = existing;
+
   // compare hash
-  const isMatch = await crypt.compare(object.password, existing.password);
-  if (!isMatch){
+  const isMatch = await crypt.compare(password, hashed);
+  if (!isMatch) {
     throw new Error('Invalid password.')
   }
 
   // create token
   const payload = {
-    username: object.username,
-    email: object.email,
-    roles: object.roles,
-    isDeleted: object.isDeleted,
-    isVerified: object.isVerified,
+    id,
+    email,
+    username,
+    roles,
+    isDeleted,
+    isVerified,
   };
 
   const token = jwt.sign({ ...payload });

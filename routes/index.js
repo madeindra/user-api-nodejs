@@ -9,7 +9,7 @@ const usersController = require('../modules/users/users.controllers');
 router.get('/', homeController.ping);
 
 // users route
-router.post('/api/v1/register', usersController.registerUser);
+router.post('/api/v1/register', usersController.register);
 router.post('/api/v1/login', usersController.login);
 
 // export router
