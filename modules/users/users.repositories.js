@@ -2,14 +2,14 @@
 const db = require('../../libs/db');
 
 // import constants
-const { collection: { users } } = require('../../libs/constant');
+const { COLLECTION: { USERS } } = require('../../libs/constant');
 
 function insertOne(document, options) {
-  return db.insertOne(users, document, options);
+  return db.insertOne(USERS, document, options);
 }
 
 function findOne(condition, options) {
-  return db.findOne(users, condition, options);
+  return db.findOne(USERS, condition, options);
 }
 
 // export functions

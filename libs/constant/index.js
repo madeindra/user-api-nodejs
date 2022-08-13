@@ -1,15 +1,15 @@
 // collection names
-const collection = Object.freeze({
-  users: 'users',
+const COLLECTION = Object.freeze({
+  USERS: 'users',
 });
 
 // roles names
-const roles = Object.freeze({
-  user: 'user',
-  admin: 'admin',
+const ROLES = Object.freeze({
+  USER: 'user',
+  ADMIN: 'admin',
 });
 
 module.exports = {
-  collection,
-  roles,
+  COLLECTION,
+  ROLES,
 }

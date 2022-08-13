@@ -5,7 +5,7 @@ const jwt = require('../../libs/jwt');
 const uuid = require('../../libs/uuid');
 
 // import constant
-const { roles: { user, admin } } = require('../../libs/constant');
+const { ROLES: { USER } } = require('../../libs/constant');
 
 async function register(data) {
   // deconstruct
@@ -32,7 +32,7 @@ async function register(data) {
     email,
     username,
     id: uuid.generate(),
-    roles: [user],
+    roles: [USER],
     password: await crypt.hash(password),
     isDeleted: false,
     isVerified: true,
