@@ -3,84 +3,91 @@ const repository = require('./users.repositories');
 const crypt = require('../../libs/crypt');
 const jwt = require('../../libs/jwt');
 const uuid = require('../../libs/uuid');
+const validation = require('./user.validations');
+const wrap = require('../../libs/wrap');
 
 // import constant
-const { ROLES: { USER } } = require('../../libs/constant');
+const { ROLES, CODE, MESSAGE } = require('../../libs/constant');
 
-async function register(data) {
+async function register(body) {
   // deconstruct
-  const { username, email, password } = data;
+  const { username, email, password } = body;
+
+  // validate body
+  const { error } = validation.register.validate({ username, email, password });
+  if (error) {
+    throw wrap.result(CODE.BAD_REQUEST, MESSAGE.BAD_REQUEST);
+  }
 
   // check if email exist
   if (!email) {
-    throw new Error('Invalid email.');
+    throw wrap.result(CODE.BAD_REQUEST, MESSAGE.EMAIL_INVALID);
   }
 
   let existing;
   try {
     existing = await repository.findOne({ email });
   } catch (err) {
-    throw new Error('Database operation failed.')
+    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
   }
 
   if (existing) {
-    throw new Error('Email already registered.');
+    throw wrap.result(CODE.CONFLICT, MESSAGE.EMAIL_REGISTERED);
   }
 
   // create user
   const newUser = {
+    _id: uuid.generate(),
     email,
     username,
-    id: uuid.generate(),
-    roles: [USER],
+    roles: [ROLES.USER],
     password: await crypt.hash(password),
     isDeleted: false,
     isVerified: true,
   };
 
   // add to db
-  let result;
   try {
-    result = await repository.insertOne({ ...newUser });
+    await repository.insertOne({ ...newUser });
   } catch (err) {
-    throw new Error('Database operation failed.')
+    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
   }
 
   // return response
-  return result;
+  return wrap.result(CODE.CREATED, MESSAGE.REGISTRATION_SUCCESS);
 }
 
-async function login(data) {
+async function login(body) {
   // deconstruct
-  const { email, password } = data;
+  const { email, password } = body;
 
   // check if email exist
   if (!email) {
-    throw new Error('Invalid email.');
+    throw wrap.result(CODE.BAD_REQUEST, MESSAGE.EMAIL_INVALID);
   }
 
   let existing;
   try {
     existing = await repository.findOne({ email }, { _id: 0 });
   } catch (err) {
-    throw new Error('Database operation failed.')
+    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
   }
 
   if (!existing) {
-    throw new Error('User does not exist.');
+    throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.CREDENTIAL_INVALID);
   }
 
-  const { id, username, roles, isDeleted, isVerified, password: hashed } = existing;
+  const { _id, username, roles, isDeleted, isVerified, password: hashed } = existing;
 
   // compare hash
   const isMatch = await crypt.compare(password, hashed);
   if (!isMatch) {
-    throw new Error('Invalid password.')
+    throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.CREDENTIAL_INVALID);
   }
 
   // create token
   const payload = {
-    id,
+    id: _id,
     email,
     username,
     roles,
@@ -91,10 +98,7 @@ async function login(data) {
   const token = jwt.sign({ ...payload });
 
   // return response
-  return {
-    ...payload,
-    token,
-  };
+  return wrap.result(CODE.OK, MESSAGE.LOGIN_SUCCESS, { ...payload, token });
 }
 
 module.exports = {
