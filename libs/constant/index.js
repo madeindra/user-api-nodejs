@@ -1,6 +1,7 @@
 // collection names
 const COLLECTION = Object.freeze({
   USERS: 'users',
+  TOKENS: 'tokens',
 });
 
 // roles names

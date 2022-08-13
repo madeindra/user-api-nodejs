@@ -16,6 +16,7 @@ const db = Object.freeze({
 // jwt configurations
 const jwt = Object.freeze({
   secret: process.env.JWT_SECRET || 'secret',
+  secretRefresh: process.env.JWT_SECRET_REFRESH || 'refresh',
 });
 
 // crypt configuration
