@@ -1,0 +1,5 @@
+deploy
+docs
+node_modules
+tests
+jest.config.js
