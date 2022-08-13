@@ -41,4 +41,4 @@ module.exports = {
   ROLES,
   CODE,
   MESSAGE,
-}
+};

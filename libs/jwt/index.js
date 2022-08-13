@@ -1,8 +1,8 @@
 // import configuration
+const jsonwebtoken = require('jsonwebtoken');
 const { jwt: { secret } } = require('../env');
 
 // import jwt
-const jsonwebtoken = require('jsonwebtoken');
 
 const options = {
   expiresIn: '1h',
@@ -10,7 +10,7 @@ const options = {
 
 // token signing function
 function sign(payload) {
-  return jsonwebtoken.sign(payload, secret, options)
+  return jsonwebtoken.sign(payload, secret, options);
 }
 
 // token verification function
@@ -21,4 +21,4 @@ function verify(token) {
 module.exports = {
   sign,
   verify,
-}
+};

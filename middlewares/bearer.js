@@ -4,7 +4,7 @@ const jwt = require('../libs/jwt');
 // bearer with jwt middleware authorization
 const bearerAuthorization = (req, res, next) => {
   // read from 'authorization' header
-  let token = req.headers['authorization'];
+  let token = req.headers.authorization;
 
   // if token not found
   if (!token) {
@@ -24,13 +24,13 @@ const bearerAuthorization = (req, res, next) => {
 
     // inject decoded data to request object
     req.user = decoded;
-    next();
+    return next();
   } catch (err) {
     // if token is invalid
     return res.status(401).json({
       message: 'Unauthorized access.',
     });
   }
-}
+};
 
 module.exports = bearerAuthorization;

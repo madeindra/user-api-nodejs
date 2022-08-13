@@ -7,7 +7,7 @@ async function register(req, res) {
   const { body } = req;
 
   // pass to service
-  let result
+  let result;
   try {
     result = await service.register(body);
   } catch (err) {
@@ -23,7 +23,7 @@ async function login(req, res) {
   const { body } = req;
 
   // pass to service
-  let result
+  let result;
   try {
     result = await service.login(body);
   } catch (err) {

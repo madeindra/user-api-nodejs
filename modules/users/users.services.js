@@ -81,7 +81,7 @@ async function login(body) {
   if (error) {
     throw wrap.result(CODE.BAD_REQUEST, MESSAGE.BAD_REQUEST);
   }
-  
+
   // check if email exist
   if (!email) {
     throw wrap.result(CODE.BAD_REQUEST, MESSAGE.EMAIL_INVALID);
@@ -99,7 +99,9 @@ async function login(body) {
   }
 
   // deconstruct user data
-  const { _id, username, roles, isDeleted, isVerified, createdAt, updatedAt, password: hashed } = existing;
+  const {
+    _id, username, roles, isDeleted, isVerified, createdAt, updatedAt, password: hashed,
+  } = existing;
 
   // compare hash
   const isMatch = await crypt.compare(password, hashed);

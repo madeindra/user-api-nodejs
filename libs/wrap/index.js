@@ -5,9 +5,9 @@ function result(code, message, data) {
     code,
     message,
     data,
-  }
+  };
 }
 
 module.exports = {
   result,
-}
+};

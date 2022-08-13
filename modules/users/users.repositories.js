@@ -16,4 +16,4 @@ function findOne(condition, options) {
 module.exports = {
   insertOne,
   findOne,
-}
+};

@@ -1,5 +1,5 @@
 // import constant
-const { CODE, MESSAGE  } = require("../constant");
+const { CODE, MESSAGE } = require('../constant');
 
 // response send function
 function send(res, result = {}) {
@@ -7,7 +7,7 @@ function send(res, result = {}) {
   const { data } = result;
   let { code, message } = result;
 
-  //set default code
+  // set default code
   if (!code) {
     code = CODE.INTERNAL_SERVER_ERROR;
   }
@@ -28,4 +28,4 @@ function send(res, result = {}) {
 
 module.exports = {
   send,
-}
+};

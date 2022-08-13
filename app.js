@@ -17,8 +17,8 @@ const app = express();
 // setup middleware
 app.use(cors()); // CORS, update in production
 app.use(helmet()); // security
-app.use(pino());  // logging middleware
-app.use(express.json());  // json body parser
+app.use(pino()); // logging middleware
+app.use(express.json()); // json body parser
 
 // implement routes
 app.use('/', routes);

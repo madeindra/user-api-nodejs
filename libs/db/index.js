@@ -1,17 +1,17 @@
 // import configuration
+const { MongoClient } = require('mongodb');
 const { db } = require('../env');
 
 // import dependencies
-const { MongoClient } = require('mongodb');
 
 // set connection
 let client;
 let conn;
 
 // database init functions
-async function init()  {
-  client = new MongoClient(db.uri)
-  
+async function init() {
+  client = new MongoClient(db.uri);
+
   await client.connect();
   conn = client.db(db.database);
 }
@@ -33,7 +33,7 @@ function insertOne(collection = '', document = {}, options = {}) {
 
 // inser many in collection
 function insertMany(collection = '', documents = [], options = {}) {
-  return conn.collection(collection).insertMany([ ...documents ], { ...options });
+  return conn.collection(collection).insertMany([...documents], { ...options });
 }
 
 // find one in collection
@@ -66,7 +66,6 @@ function deleteMany(collection = '', condition = {}, options = {}) {
   return conn.collection(collection).deleteMany({ ...condition }, { ...options });
 }
 
-
 module.exports = {
   init,
   close,
@@ -79,4 +78,4 @@ module.exports = {
   updateMany,
   deleteOne,
   deleteMany,
-}
+};
