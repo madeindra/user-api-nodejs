@@ -1,7 +1,21 @@
+// import constant
+const { CODE, MESSAGE  } = require("../constant");
+
 // response send function
-function send(res, result) {
+function send(res, result = {}) {
   // deconstruct result
-  const { code, message, data } = result;
+  const { data } = result;
+  let { code, message } = result;
+
+  //set default code
+  if (!code) {
+    code = CODE.INTERNAL_SERVER_ERROR;
+  }
+
+  // set default message
+  if (!message) {
+    message = MESSAGE.FAILED;
+  }
 
   // return response
   return res.status(code).json({
