@@ -1,9 +1,9 @@
 // import dependencies
 const repository = require('./users.repositories');
+const validation = require('./user.validations');
 const crypt = require('../../libs/crypt');
 const jwt = require('../../libs/jwt');
 const uuid = require('../../libs/uuid');
-const validation = require('./user.validations');
 const wrap = require('../../libs/wrap');
 
 // import constant
@@ -89,7 +89,7 @@ async function login(body) {
 
   let existing;
   try {
-    existing = await repository.findOne({ email }, { _id: 0 });
+    existing = await repository.findOne({ email });
   } catch (err) {
     throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
   }
@@ -122,9 +122,10 @@ async function login(body) {
   };
 
   const token = jwt.sign({ ...payload });
+  const refreshToken = jwt.signRefresh({ ...payload });
 
   // return response
-  return wrap.result(CODE.OK, MESSAGE.LOGIN_SUCCESS, { ...payload, token });
+  return wrap.result(CODE.OK, MESSAGE.LOGIN_SUCCESS, { ...payload, token, refreshToken });
 }
 
 module.exports = {
