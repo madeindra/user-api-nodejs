@@ -25,11 +25,13 @@ const CODE = Object.freeze({
 // response message
 const MESSAGE = Object.freeze({
   GENERAL: 'Operation successful.',
+  FAILED: 'Operation failed.',
   BAD_REQUEST: 'Bad request.',
   DATABASE_FAILED: 'Database operation failed.',
   EMAIL_INVALID: 'Invalid email format.',
   CREDENTIAL_INVALID: 'Invalid email or password',
-  EMAIL_REGISTERED: 'Email already registered.',
+  EMAIL_REGISTERED: 'Email is already registered.',
+  USERNAME_TAKEN: 'Username is already taken.',
   REGISTRATION_SUCCESS: 'Registration successful.',
   LOGIN_SUCCESS: 'Login successful.',
 });

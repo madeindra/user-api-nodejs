@@ -35,6 +35,19 @@ async function register(body) {
     throw wrap.result(CODE.CONFLICT, MESSAGE.EMAIL_REGISTERED);
   }
 
+  // check if username taken
+  if (username) {
+    try {
+      existing = await repository.findOne({ username });
+    } catch (err) {
+      throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
+    }
+  }
+
+  if (existing) {
+    throw wrap.result(CODE.CONFLICT, MESSAGE.USERNAME_TAKEN);
+  }
+
   // create user
   const newUser = {
     _id: uuid.generate(),
@@ -44,6 +57,8 @@ async function register(body) {
     password: await crypt.hash(password),
     isDeleted: false,
     isVerified: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   // add to db
@@ -61,6 +76,12 @@ async function login(body) {
   // deconstruct
   const { email, password } = body;
 
+  // validate body
+  const { error } = validation.login.validate({ email, password });
+  if (error) {
+    throw wrap.result(CODE.BAD_REQUEST, MESSAGE.BAD_REQUEST);
+  }
+  
   // check if email exist
   if (!email) {
     throw wrap.result(CODE.BAD_REQUEST, MESSAGE.EMAIL_INVALID);
@@ -77,7 +98,8 @@ async function login(body) {
     throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.CREDENTIAL_INVALID);
   }
 
-  const { _id, username, roles, isDeleted, isVerified, password: hashed } = existing;
+  // deconstruct user data
+  const { _id, username, roles, isDeleted, isVerified, createdAt, updatedAt, password: hashed } = existing;
 
   // compare hash
   const isMatch = await crypt.compare(password, hashed);
@@ -93,6 +115,8 @@ async function login(body) {
     roles,
     isDeleted,
     isVerified,
+    createdAt,
+    updatedAt,
   };
 
   const token = jwt.sign({ ...payload });
