@@ -11,6 +11,7 @@ router.get('/', homeController.ping);
 // users route
 router.post('/api/v1/register', usersController.register);
 router.post('/api/v1/login', usersController.login);
+router.get('/api/v1/refresh', usersController.refresh);
 
 // export router
 module.exports = router;
