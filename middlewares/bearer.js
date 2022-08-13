@@ -1,5 +1,10 @@
 // import dependencies
 const jwt = require('../libs/jwt');
+const response = require('../libs/response');
+const wrap = require('../libs/wrap');
+
+// import constant
+const { CODE, MESSAGE } = require('../libs/constant');
 
 // bearer with jwt middleware authorization
 const bearerAuthorization = (req, res, next) => {
@@ -8,9 +13,8 @@ const bearerAuthorization = (req, res, next) => {
 
   // if token not found
   if (!token) {
-    return res.status(401).json({
-      message: 'Unauthorized access.',
-    });
+    const error = wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
+    return response.send(res, error);
   }
 
   // trim 'Bearer ' from token
@@ -27,9 +31,8 @@ const bearerAuthorization = (req, res, next) => {
     return next();
   } catch (err) {
     // if token is invalid
-    return res.status(401).json({
-      message: 'Unauthorized access.',
-    });
+    const error = wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
+    return response.send(res, error);
   }
 };
 

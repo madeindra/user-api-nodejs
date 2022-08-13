@@ -26,6 +26,7 @@ const CODE = Object.freeze({
 const MESSAGE = Object.freeze({
   GENERAL: 'Operation successful.',
   FAILED: 'Operation failed.',
+  ERROR: 'An error occured.',
   BAD_REQUEST: 'Bad request.',
   DATABASE_FAILED: 'Database operation failed.',
   EMAIL_INVALID: 'Invalid email format.',
@@ -34,6 +35,8 @@ const MESSAGE = Object.freeze({
   USERNAME_TAKEN: 'Username is already taken.',
   REGISTRATION_SUCCESS: 'Registration successful.',
   LOGIN_SUCCESS: 'Login successful.',
+  UNAUTHORIZED: 'Unauthorized access.',
+  ROUTE_NOT_FOUND: 'Route not found.',
 });
 
 module.exports = {
