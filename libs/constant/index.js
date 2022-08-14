@@ -31,13 +31,14 @@ const MESSAGE = Object.freeze({
   BAD_REQUEST: 'Bad request.',
   DATABASE_FAILED: 'Database operation failed.',
   EMAIL_INVALID: 'Invalid email format.',
-  CREDENTIAL_INVALID: 'Invalid email or password',
+  CREDENTIAL_INVALID: 'Invalid username or password',
   EMAIL_REGISTERED: 'Email is already registered.',
   USERNAME_TAKEN: 'Username is already taken.',
   REGISTRATION_SUCCESS: 'Registration successful.',
   LOGIN_SUCCESS: 'Login successful.',
   UNAUTHORIZED: 'Unauthorized access.',
   ROUTE_NOT_FOUND: 'Route not found.',
+  USER_NOT_EXIST: 'User does not exist.',
 });
 
 module.exports = {
