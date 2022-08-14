@@ -9,10 +9,10 @@ const tokensController = require('../modules/tokens/tokens.controllers');
 // main route
 router.get('/', homeController.ping);
 
-// users route
-router.post('/api/v1/register', usersController.register);
-router.post('/api/v1/login', usersController.login);
-router.get('/api/v1/refresh', tokensController.refresh);
+// auth route (public)
+router.post('/api/v1/auth/register', usersController.register);
+router.post('/api/v1/auth/login', usersController.login);
+router.get('/api/v1/auth/refresh', tokensController.refresh);
 
 // export router
 module.exports = router;
