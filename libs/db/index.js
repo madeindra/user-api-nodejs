@@ -43,7 +43,16 @@ function findOne(collection = '', condition = {}, options = {}) {
 
 // find many in collection
 function findMany(collection = '', condition = {}, options = {}) {
-  return conn.collection(collection).find({ ...condition }, { ...options });
+  return conn.collection(collection).find({ ...condition }, { ...options }).toArray();
+}
+
+// find with offset in collection
+function findOffset(collection = '', condition = {}, options = {}, sort = { _id: 1 }, page = 1, limit = 10) {
+  const offset = limit * (page - 1);
+  return conn.collection(collection).find({ ...condition }, { ...options })
+    .sort(sort).limit(limit)
+    .skip(offset)
+    .toArray();
 }
 
 // update one in collection
@@ -74,6 +83,7 @@ module.exports = {
   insertMany,
   findOne,
   findMany,
+  findOffset,
   updateOne,
   updateMany,
   deleteOne,
