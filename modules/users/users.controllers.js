@@ -68,7 +68,7 @@ async function createUser(req, res) {
 
 async function readAllUsers(req, res) {
   // deconstruct param & query
-  const { params: id, query } = req;
+  const { params: { id }, query } = req;
 
   // pass to service
   let result;
@@ -84,7 +84,7 @@ async function readAllUsers(req, res) {
 
 async function readOneUser(req, res) {
   // deconstruct param
-  const { params: id } = req;
+  const { params: { id } } = req;
 
   // pass to service
   let result;
@@ -100,7 +100,7 @@ async function readOneUser(req, res) {
 
 async function updateUser(req, res) {
   // deconstruct param & body
-  const { params: id, body } = req;
+  const { params: { id }, body } = req;
 
   // pass to service
   let result;
@@ -116,7 +116,7 @@ async function updateUser(req, res) {
 
 async function deleteUser(req, res) {
   // deconstruct param
-  const { params: id } = req;
+  const { params: { id } } = req;
 
   // pass to service
   let result;
