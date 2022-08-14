@@ -20,6 +20,7 @@ router.get('/api/v1/auth/refresh', tokensController.refresh);
 
 // user route (authenticated admin only)
 router.post('/api/v1/user', bearerMiddleware, adminOnly, usersController.createUser);
+router.get('/api/v1/user', bearerMiddleware, adminOnly, usersController.readAllUsers);
 router.get('/api/v1/user/:id', bearerMiddleware, adminOnly, usersController.readOneUser);
 router.put('/api/v1/user/:id', bearerMiddleware, adminOnly, usersController.updateUser);
 router.delete('/api/v1/user/:id', bearerMiddleware, adminOnly, usersController.deleteUser);

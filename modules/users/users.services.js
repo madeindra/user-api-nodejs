@@ -245,6 +245,64 @@ async function createUser(body) {
   return wrap.result(CODE.CREATED, MESSAGE.GENERAL, newUser);
 }
 
+async function readAllUsers(query) {
+  // deconstruct
+  let { sort, page, limit } = query;
+
+  // cast to integer
+  sort = Number(sort);
+  page = Number(page);
+  limit = Number(limit);
+
+  //  set default sort value
+  if (sort !== 1 && sort !== -1) {
+    sort = 1;
+  }
+
+  //  set default page value
+  if (!page) {
+    page = 1;
+  }
+
+  //  set default limit value
+  if (!limit) {
+    limit = 10;
+  }
+
+  // fetch user data
+  let userData = [];
+  try {
+    userData = await repository.findOffset({ isDeleted: false }, {
+      projection: {
+        _id: 0,
+        id: '$_id',
+        email: 1,
+        username: 1,
+        roles: 1,
+        password: 'REDACTED PASSWORD',
+        isDeleted: 1,
+        isVerified: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    }, {
+      createdAt: sort,
+    }, page, limit);
+  } catch (err) {
+    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
+  }
+
+  // create metadata
+  const metaData = {
+    sort,
+    page,
+    limit,
+  };
+
+  // return response
+  return wrap.result(CODE.OK, MESSAGE.GENERAL, userData, metaData);
+}
+
 async function readOneUser(id) {
   // check if id exist
   if (!id) {
@@ -421,6 +479,7 @@ module.exports = {
   login,
   getProfile,
   createUser,
+  readAllUsers,
   readOneUser,
   updateUser,
   deleteUser,

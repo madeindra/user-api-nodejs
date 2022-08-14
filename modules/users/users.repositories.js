@@ -12,8 +12,8 @@ function findOne(condition, options) {
   return db.findOne(USERS, condition, options);
 }
 
-function findMany(condition, options) {
-  return db.findMany(USERS, condition, options);
+function findOffset(condition, options, sort, page, limit) {
+  return db.findOffset(USERS, condition, options, sort, page, limit);
 }
 
 function updateOne(condition, updateDoc, options) {
@@ -24,6 +24,6 @@ function updateOne(condition, updateDoc, options) {
 module.exports = {
   insertOne,
   findOne,
-  findMany,
+  findOffset,
   updateOne,
 };

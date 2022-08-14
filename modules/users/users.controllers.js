@@ -68,12 +68,12 @@ async function createUser(req, res) {
 
 async function readAllUsers(req, res) {
   // deconstruct param & query
-  const { params: { id }, query } = req;
+  const { query } = req;
 
   // pass to service
   let result;
   try {
-    result = await service.readAllUsers(id, query);
+    result = await service.readAllUsers(query);
   } catch (err) {
     return response.send(res, err);
   }
