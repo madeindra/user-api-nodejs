@@ -245,6 +245,42 @@ async function createUser(body) {
   return wrap.result(CODE.CREATED, MESSAGE.GENERAL, newUser);
 }
 
+async function readOneUser(id) {
+  // check if id exist
+  if (!id) {
+    throw wrap.result(CODE.BAD_REQUEST, MESSAGE.BAD_REQUEST);
+  }
+
+  // check existing user, exclude deleted data
+  let existing;
+  try {
+    existing = await repository.findOne({ _id: id, isDeleted: false }, {
+      projection: {
+        _id: 0,
+        id: '$_id',
+        email: 1,
+        username: 1,
+        roles: 1,
+        password: 'REDACTED PASSWORD',
+        isDeleted: 1,
+        isVerified: 1,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    });
+  } catch (err) {
+    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
+  }
+
+  // if not exist, return error
+  if (!existing) {
+    throw wrap.result(CODE.NOT_FOUND, MESSAGE.USER_NOT_EXIST);
+  }
+
+  // return response
+  return wrap.result(CODE.OK, MESSAGE.GENERAL, existing);
+}
+
 async function updateUser(id, body) {
   // check if id exist
   if (!id) {
@@ -353,10 +389,39 @@ async function updateUser(id, body) {
   return wrap.result(CODE.OK, MESSAGE.GENERAL, updated);
 }
 
+async function deleteUser(id) {
+  // check if id exist
+  if (!id) {
+    throw wrap.result(CODE.BAD_REQUEST, MESSAGE.BAD_REQUEST);
+  }
+
+  // check existing user, exclude deleted data
+  let currentData;
+  try {
+    currentData = await repository.findOne({ _id: id, isDeleted: false });
+  } catch (err) {
+    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
+  }
+
+  // if not exist, return error
+  if (!currentData) {
+    throw wrap.result(CODE.NOT_FOUND, MESSAGE.USER_NOT_EXIST);
+  }
+
+  // update in db
+  try {
+    await repository.updateOne({ _id: id }, { $set: { isDeleted: true } });
+  } catch (err) {
+    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
+  }
+}
+
 module.exports = {
   register,
   login,
   getProfile,
   createUser,
+  readOneUser,
   updateUser,
+  deleteUser,
 };
