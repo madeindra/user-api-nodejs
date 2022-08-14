@@ -12,8 +12,23 @@ function findOne(condition, options) {
   return db.findOne(USERS, condition, options);
 }
 
+function findMany(condition, options) {
+  return db.findMany(USERS, condition, options);
+}
+
+function updateOne(condition, updateDoc, options) {
+  return db.updateOne(USERS, condition, updateDoc, options);
+}
+
+function deleteOne(condition, options) {
+  return db.deleteOne(USERS, condition, options);
+}
+
 // export functions
 module.exports = {
   insertOne,
   findOne,
+  findMany,
+  updateOne,
+  deleteOne,
 };
