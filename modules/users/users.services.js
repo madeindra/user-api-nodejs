@@ -131,7 +131,7 @@ async function login(body) {
 
 async function getProfile(user) {
   // deconstruct
-  const { id } = user;
+  const { _id: id } = user;
 
   // check if id exist
   if (!id) {
