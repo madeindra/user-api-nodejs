@@ -74,22 +74,22 @@ async function register(body) {
 
 async function login(body) {
   // deconstruct
-  const { email, password } = body;
+  const { username, password } = body;
 
   // validate body
-  const { error } = validation.login.validate({ email, password });
+  const { error } = validation.login.validate({ username, password });
   if (error) {
     throw wrap.result(CODE.BAD_REQUEST, MESSAGE.BAD_REQUEST);
   }
 
-  // check if email exist
-  if (!email) {
-    throw wrap.result(CODE.BAD_REQUEST, MESSAGE.EMAIL_INVALID);
+  // check if username exist
+  if (!username) {
+    throw wrap.result(CODE.BAD_REQUEST, MESSAGE.CREDENTIAL_INVALID);
   }
 
   let existing;
   try {
-    existing = await repository.findOne({ email });
+    existing = await repository.findOne({ username });
   } catch (err) {
     throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
   }
@@ -100,7 +100,7 @@ async function login(body) {
 
   // deconstruct user data
   const {
-    _id, username, roles, isDeleted, isVerified, createdAt, updatedAt, password: hashed,
+    _id, email, roles, isDeleted, isVerified, createdAt, updatedAt, password: hashed,
   } = existing;
 
   // compare hash
