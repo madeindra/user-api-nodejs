@@ -34,7 +34,24 @@ async function login(req, res) {
   return response.send(res, result);
 }
 
+async function getProfile(req, res) {
+  // deconstruct body from bearer middleware
+  const { user } = req;
+
+  // pass to service
+  let result;
+  try {
+    result = await service.getProfile(user);
+  } catch (err) {
+    return response.send(res, err);
+  }
+
+  // return result
+  return response.send(res, result);
+}
+
 module.exports = {
   register,
   login,
+  getProfile,
 };

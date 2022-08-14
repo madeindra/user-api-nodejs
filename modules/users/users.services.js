@@ -128,7 +128,50 @@ async function login(body) {
   return wrap.result(CODE.OK, MESSAGE.LOGIN_SUCCESS, { ...payload, token, refreshToken });
 }
 
+async function getProfile(user) {
+  // deconstruct
+  const { id } = user;
+
+  // check if id exist
+  if (!id) {
+    throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
+  }
+
+  // get latest data
+  let existing;
+  try {
+    existing = await repository.findOne({ _id: id });
+  } catch (err) {
+    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
+  }
+
+  if (!existing) {
+    throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.CREDENTIAL_INVALID);
+  }
+
+  // deconstruct user data
+  const {
+    _id, email, username, roles, isDeleted, isVerified, createdAt, updatedAt,
+  } = existing;
+
+  // create response
+  const response = {
+    id: _id,
+    email,
+    username,
+    roles,
+    isDeleted,
+    isVerified,
+    createdAt,
+    updatedAt,
+  };
+
+  // return response
+  return wrap.result(CODE.OK, MESSAGE.GENERAL, response);
+}
+
 module.exports = {
   register,
   login,
+  getProfile,
 };
