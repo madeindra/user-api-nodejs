@@ -2,12 +2,13 @@
 const jwt = require('../libs/jwt');
 const response = require('../libs/response');
 const wrap = require('../libs/wrap');
+const repositoryUser = require('../modules/users/users.repositories');
 
 // import constant
 const { CODE, MESSAGE } = require('../libs/constant');
 
 // bearer with jwt middleware authorization
-const bearerAuthorization = (req, res, next) => {
+async function bearerAuthorization(req, res, next) {
   // read from 'authorization' header
   let token = req.headers.authorization;
 
@@ -23,17 +24,31 @@ const bearerAuthorization = (req, res, next) => {
   }
 
   try {
-    // coba validate token
+    // validate token
     const decoded = jwt.verify(token);
 
-    // inject decoded data to request object
-    req.user = decoded;
+    // deconstruct
+    const { id } = decoded;
+    if (!id) {
+      const error = wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
+      return response.send(res, error);
+    }
+
+    // make sure user exist
+    const user = await repositoryUser.findOne({ _id: id });
+    if (!user || user?.isDeleted) {
+      const error = wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
+      return response.send(res, error);
+    }
+
+    // inject latest user data to request object
+    req.user = user;
     return next();
   } catch (err) {
     // if token is invalid
     const error = wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
     return response.send(res, error);
   }
-};
+}
 
 module.exports = bearerAuthorization;
