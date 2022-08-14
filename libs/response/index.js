@@ -4,7 +4,7 @@ const { CODE, MESSAGE } = require('../constant');
 // response send function
 function send(res, result = {}) {
   // deconstruct result
-  const { data } = result;
+  const { data, meta } = result;
   let { code, message } = result;
 
   // set default code
@@ -23,6 +23,7 @@ function send(res, result = {}) {
     success: code < 400,
     message,
     data,
+    meta,
   });
 }
 
