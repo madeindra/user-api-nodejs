@@ -4,12 +4,12 @@ const response = require('../../libs/response');
 
 async function refresh(req, res) {
   // deconstruct body & user from token
-  const { body, user } = req;
+  const { body } = req;
 
   // pass to service
   let result;
   try {
-    result = await service.refresh(body, user);
+    result = await service.refresh(body);
   } catch (err) {
     return response.send(res, err);
   }

@@ -16,7 +16,7 @@ router.get('/', homeController.ping);
 // auth route (public)
 router.post('/api/v1/auth/register', usersController.register);
 router.post('/api/v1/auth/login', usersController.login);
-router.get('/api/v1/auth/refresh', tokensController.refresh);
+router.post('/api/v1/auth/refresh', tokensController.refresh);
 
 // user route (authenticated admin only)
 router.post('/api/v1/user', bearerMiddleware, adminOnly, usersController.createUser);

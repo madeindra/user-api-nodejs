@@ -9,15 +9,7 @@ const wrap = require('../../libs/wrap');
 // import constant
 const { CODE, MESSAGE } = require('../../libs/constant');
 
-async function refresh(body, user) {
-  // deconstruct
-  const { id } = user;
-
-  // check if id exist
-  if (!id) {
-    throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
-  }
-
+async function refresh(body) {
   // deconstruct
   const { refreshToken } = body;
 
@@ -41,13 +33,15 @@ async function refresh(body, user) {
   }
 
   // validate
+  let decoded;
   try {
-    jwt.verifyRefresh(refreshToken);
+    decoded = jwt.verifyRefresh(refreshToken);
   } catch (err) {
     throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
   }
 
   // get latest user
+  const { id } = decoded;
   let existingUser;
   try {
     existingUser = await repositoryUser.findOne({ _id: id });
