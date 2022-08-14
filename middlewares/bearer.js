@@ -35,8 +35,8 @@ async function bearerAuthorization(req, res, next) {
     }
 
     // make sure user exist
-    const user = await repositoryUser.findOne({ _id: id });
-    if (!user || user?.isDeleted) {
+    const user = await repositoryUser.findOne({ _id: id, isDeleted: false });
+    if (!user) {
       const error = wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
       return response.send(res, error);
     }

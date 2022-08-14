@@ -11,7 +11,7 @@ function adminOnly(req, res, next) {
   const { user } = req;
 
   // check if user does not have admin role
-  if (!user?.role.includes(ROLES.ADMIN)) {
+  if (!user?.roles.includes(ROLES.ADMIN)) {
     const error = wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
     return response.send(res, error);
   }
