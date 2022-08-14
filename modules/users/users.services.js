@@ -178,7 +178,7 @@ async function createUser(body) {
   } = body;
 
   // validate body
-  const { error } = validation.user.validate({
+  const { error } = validation.create.validate({
     username, email, password, roles,
   });
 
@@ -242,7 +242,7 @@ async function createUser(body) {
   delete newUser._id;
 
   // return response
-  return wrap.result(CODE.CREATED, MESSAGE.REGISTRATION_SUCCESS, newUser);
+  return wrap.result(CODE.CREATED, MESSAGE.GENERAL, newUser);
 }
 
 async function updateUser(id, body) {
@@ -257,7 +257,7 @@ async function updateUser(id, body) {
   } = body;
 
   // validate body
-  const { error } = validation.user.validate({
+  const { error } = validation.update.validate({
     id, username, email, password, roles, isDeleted, isVerified,
   });
 
@@ -278,33 +278,35 @@ async function updateUser(id, body) {
     throw wrap.result(CODE.NOT_FOUND, MESSAGE.USER_NOT_EXIST);
   }
 
+  // deconstruct
+  const { email: currentEmail, username: currentUsername } = currentData;
+
   // check if email used by other
   let existing;
-  if (!email) {
-    throw wrap.result(CODE.BAD_REQUEST, MESSAGE.EMAIL_INVALID);
-  }
 
-  try {
-    existing = await repository.findOne({ _id: { $ne: id }, email });
-  } catch (err) {
-    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
-  }
+  if (email !== currentEmail) {
+    try {
+      existing = await repository.findOne({ _id: { $ne: id }, email });
+    } catch (err) {
+      throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
+    }
 
-  if (existing) {
-    throw wrap.result(CODE.CONFLICT, MESSAGE.EMAIL_REGISTERED);
+    if (existing) {
+      throw wrap.result(CODE.CONFLICT, MESSAGE.EMAIL_REGISTERED);
+    }
   }
 
   // check if username used by other
-  if (username) {
+  if (username !== currentUsername) {
     try {
       existing = await repository.findOne({ _id: { $ne: id }, username });
     } catch (err) {
       throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
     }
-  }
 
-  if (existing) {
-    throw wrap.result(CODE.CONFLICT, MESSAGE.USERNAME_TAKEN);
+    if (existing) {
+      throw wrap.result(CODE.CONFLICT, MESSAGE.USERNAME_TAKEN);
+    }
   }
 
   // create update
@@ -335,7 +337,6 @@ async function updateUser(id, body) {
   }
 
   // update in db
-  let updated;
   try {
     await repository.updateOne({ _id: id }, { $set: { ...updateData } });
   } catch (err) {
@@ -343,6 +344,7 @@ async function updateUser(id, body) {
   }
 
   // change field name & obscure confidential info
+  const updated = { ...currentData, ...updateData };
   updated.id = id;
   updated.password = 'PASSWORD REDACTED';
   delete updated._id;
