@@ -1,6 +1,7 @@
 // import dependencies
-const repository = require('./tokens.repositories');
+const repositoryToken = require('./tokens.repositories');
 const validation = require('./tokens.validations');
+const repositoryUser = require('../users/users.repositories');
 const jwt = require('../../libs/jwt');
 const uuid = require('../../libs/uuid');
 const wrap = require('../../libs/wrap');
@@ -8,7 +9,15 @@ const wrap = require('../../libs/wrap');
 // import constant
 const { CODE, MESSAGE } = require('../../libs/constant');
 
-async function refresh(body) {
+async function refresh(body, user) {
+  // deconstruct
+  const { id } = user;
+
+  // check if id exist
+  if (!id) {
+    throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
+  }
+
   // deconstruct
   const { refreshToken } = body;
 
@@ -19,25 +28,53 @@ async function refresh(body) {
   }
 
   // check if refresh token is blacklisted
-  let existing;
+  let existingToken;
   try {
-    existing = await repository.findOne({ token: refreshToken });
+    existingToken = await repositoryToken.findOne({ token: refreshToken });
   } catch (err) {
     throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
   }
 
   // if exist in blacklist
-  if (existing?.isInvalid) {
+  if (existingToken?.isInvalid) {
     throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
   }
 
   // validate
-  let payload;
   try {
-    payload = jwt.verifyRefresh(refreshToken);
+    jwt.verifyRefresh(refreshToken);
   } catch (err) {
     throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
   }
+
+  // get latest user
+  let existingUser;
+  try {
+    existingUser = await repositoryUser.findOne({ _id: id });
+  } catch (err) {
+    throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
+  }
+
+  if (!existingUser) {
+    throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.CREDENTIAL_INVALID);
+  }
+
+  // deconstruct user data
+  const {
+    _id, email, username, roles, isDeleted, isVerified, createdAt, updatedAt,
+  } = existingUser;
+
+  // create payload
+  const payload = {
+    id: _id,
+    email,
+    username,
+    roles,
+    isDeleted,
+    isVerified,
+    createdAt,
+    updatedAt,
+  };
 
   // invalidate old refresh token
   const invalidToken = {
@@ -49,7 +86,7 @@ async function refresh(body) {
 
   // add to db
   try {
-    await repository.insertOne({ ...invalidToken });
+    await repositoryToken.insertOne({ ...invalidToken });
   } catch (err) {
     throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
   }
