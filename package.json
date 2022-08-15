@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "prepare": "husky install",
-    "build": "docker build -f ./deploy/Dockerfile . -t madeindra/deall"
+    "build": "docker build -f ./deploy/docker/Dockerfile . -t madeindra/deall",
+    "compose": "docker compose -f ./deploy/docker/docker-compose.yml --env-file .env up"
   },
   "repository": {
     "type": "git",
