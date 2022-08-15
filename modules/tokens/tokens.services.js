@@ -1,7 +1,7 @@
 // import dependencies
-const repositoryToken = require('./tokens.repositories');
+const tokenRepository = require('./tokens.repositories');
 const validation = require('./tokens.validations');
-const repositoryUser = require('../users/users.repositories');
+const userRepository = require('../users/users.repositories');
 const jwt = require('../../libs/jwt');
 const uuid = require('../../libs/uuid');
 const wrap = require('../../libs/wrap');
@@ -22,7 +22,7 @@ async function refresh(body) {
   // check if refresh token is blacklisted
   let existingToken;
   try {
-    existingToken = await repositoryToken.findOne({ token: refreshToken });
+    existingToken = await tokenRepository.findOne({ token: refreshToken });
   } catch (err) {
     throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.UNAUTHORIZED);
   }
@@ -44,7 +44,7 @@ async function refresh(body) {
   const { id } = decoded;
   let existingUser;
   try {
-    existingUser = await repositoryUser.findOne({ _id: id });
+    existingUser = await userRepository.findOne({ _id: id });
   } catch (err) {
     throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
   }
@@ -80,7 +80,7 @@ async function refresh(body) {
 
   // add to db
   try {
-    await repositoryToken.insertOne({ ...invalidToken });
+    await tokenRepository.insertOne({ ...invalidToken });
   } catch (err) {
     throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
   }
