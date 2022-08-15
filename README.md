@@ -113,21 +113,22 @@ You can also [click here](./docs/postman.json) to open `postman.json` for Postma
 ```mermaid
 graph TD;
     A((Start)) --> B[/Username, Email, Password/];
-    B --> C{Valid?}; 
+    B --> C{Request Body Valid?}; 
     C --> |No| V((End));
     C ---> |Yes| E{Email registered?};
     E --> |Yes| X((End));
     E ---> |No| F{Username taken?};
     F --> |Yes| Y((End));
     F ---> |No| G[(Insert into DB)];
-    G --> Z((End));
+    G --> H[Send response]
+    H --> Z((End));
 ```
 ### Login
 
 ```mermaid
 graph TD;
     A((Start)) --> B[/Username, Password/];
-    B --> C{Valid?}; 
+    B --> C{Request Body Valid?}; 
     C --> |No| D((End));
     C ---> |Yes| E[(Read in DB)];
     E --> F{User registered?};
@@ -135,31 +136,70 @@ graph TD;
     F ---> |Yes| H{Password match?}
     H --> |No| I((End));
     H --> |Yes| J[Create authorization token]
-    J --> K((End))
+    J --> K[Send response]
+    K --> L((End))
 ```
 
 ### Get Profile
 ```mermaid
 graph TD;
     A((Start)) --> B[/JWT/];
-    B --> C{Valid?}; 
+    B --> C{Authorized?}; 
     C --> |No| D((End));
     C ---> |Yes| E[(Read in DB)];
     E --> F{User Exist?};
     F --> |No| G((End));
-    F ---> |Yes| H[Send profile data]
+    F ---> |Yes| H[Send response]
     H --> I((End))
 ```
 
 ### Create User
+```mermaid
+graph TD;
+    A((Start)) --> B[/Username, Email, Password, Role, JWT/];
+    B --> C{Authorized?}; 
+    C --> |No| D((End));
+    C --> E{Request Body Valid?}; 
+    E --> |No| F((End));
+    E ---> |Yes| G{Email registered?};
+    G --> |Yes| H((End));
+    G ---> |No| I{Username taken?};
+    I --> |Yes| J((End));
+    I ---> |No| K[(Insert into DB)];
+    K --> L[Send response]
+    L --> M((End));
+```
 
 ### Read Users (collection)
 
 ### Read User (single)
+```mermaid
+graph TD;
+    A((Start)) --> B[/JWT/];
+    B --> C{Authorized?}; 
+    C --> |No| D((End));
+    C ---> |Yes| E[(Read in DB)];
+    E --> F{User Exist?};
+    F --> |No| G((End));
+    F ---> |Yes| H[Send response]
+    H --> I((End))
+```
 
 ### Update User
 
 ### Delete User
+```mermaid
+graph TD;
+    A((Start)) --> B[/JWT/];
+    B --> C{Authorized?}; 
+    C --> |No| D((End));
+    C ---> |Yes| E[(Read in DB)];
+    E --> F{User Exist?};
+    F --> |No| G((End));
+    F ---> |Yes| H[(Delete profile data)]
+    H --> I[Send response]
+    I --> J((End))
+```
 ## Deployment
 
 ### Dependencies
