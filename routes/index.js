@@ -1,6 +1,10 @@
 // import dependencies
 const router = require('express').Router();
 
+// import  swagger
+const swagger = require('swagger-ui-express');
+const openapi = require('../docs/openapi.json');
+
 // import controllers
 const homeController = require('../modules/home/home.controller');
 const usersController = require('../modules/users/users.controllers');
@@ -27,6 +31,9 @@ router.delete('/api/v1/users/:id', bearerMiddleware, adminOnly, usersController.
 
 // profile route (authenticated only)
 router.get('/api/v1/profile', bearerMiddleware, usersController.getProfile);
+
+// doc route
+router.use('/docs', swagger.serve, swagger.setup(openapi));
 
 // export router
 module.exports = router;

@@ -5,7 +5,22 @@ Demo of NodeJS Express to do CRUD operation on User Collection
 
 ### Dependencies
 
+- NodeJS v14 (or higher)
+- MongoDB v4.4
+
 ### Running the Server
+
+1. Clone this repository
+2. Install modules needed
+```
+npm install
+```
+3. Create `.env` from the example `.env.example`
+4. Make sure the database instance  is running
+5. Run the server
+```
+npm start
+```
 
 ### Admin Credential
 
@@ -44,6 +59,22 @@ git commit -m "feat: add get user profile api"
 ```
 
 ## API Routes
+
+- `POST` `/api/v1/auth/register`: Register.
+- `POST` `/api/v1/auth/login`: Login.
+- `POST` `/api/v1/auth/refresh`: Refresh Token.
+- `GET` `/api/v1/profile`: Get Profile (authenticated user & admin only).
+- `POST` `/api/v1/users`: Create a new user (admin only)
+- `GET` `/api/v1/users`: Read all existing users (admin only)
+- `GET` `/api/v1/users/:id`: Read an existing user (admin only)
+- `PUT` `/api/v1/users/:id`: Update an existing user (admin only)
+- `DELETE` `/api/v1/users/:id`: Delete an existing user (admin only)
+
+## API Documentation
+
+Run the server and go to `/docs` for OpenAPI Documentation, it points to `http://localhost:8000` by default.
+
+You can also [click here](./docs/postman.json) to open `postman.json` for Postman collection.
 
 ## How It Works
 
