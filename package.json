@@ -1,0 +1,49 @@
+{
+  "name": "deall-test",
+  "version": "1.0.0",
+  "description": "REST API for Deall! Test",
+  "main": "bin/www",
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www | pino-pretty",
+    "test": "jest --passWithNoTests",
+    "lint": "eslint .",
+    "fix": "eslint . --fix",
+    "prepare": "husky install",
+    "build": "docker build -f ./deploy/docker/Dockerfile . -t madeindra/deall",
+    "compose": "docker compose -f ./deploy/docker/docker-compose.yml --env-file .env up",
+    "kube": "kubectl apply -f ./deploy/api-deployment.yaml -f ./deploy/mongodb-service.yaml -f ./deploy/api-service.yaml -f ./deploy/mongo-persistentvolumeclaim.yaml -f ./deploy/default-networkpolicy.yaml -f ./deploy/mongodb-deployment.yaml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/madeindra/deall-test"
+  },
+  "author": "madeindra",
+  "license": "ISC",
+  "dependencies": {
+    "@joi/date": "^2.1.0",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "helmet": "^5.1.1",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.8.1",
+    "pino": "^8.4.0",
+    "pino-http": "^8.2.0",
+    "swagger-ui-express": "^4.5.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "husky": "^8.0.0",
+    "jest": "^28.1.3",
+    "nodemon": "^2.0.19",
+    "pino-pretty": "^9.0.0"
+  }
+}

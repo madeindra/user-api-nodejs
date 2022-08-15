@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  api:
+    image: 'madeindra/deall:latest'
+    network_mode: bridge
+    container_name: 'deall'
+    ports:
+      - '8000:8000'
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - MONGO_URI=${MONGO_URI}
+      - MONGO_DATABASE=${MONGO_DATABASE}
+      - JWT_SECRET=${JWT_SECRET}
+      - CRYPT_ROUND=${CRYPT_ROUND}
+    depends_on:
+      - mongodb
+    networks:
+      - default
+
+  mongodb:
+    image: mongo:4.4
+    network_mode: bridge
+    container_name: mongodb
+    volumes:
+      - mongo:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - default
+
+volumes:
+    mongo:
+
+networks:
+  default:
+    driver: bridge

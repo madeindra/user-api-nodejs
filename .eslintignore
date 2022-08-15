@@ -1,0 +1,7 @@
+coverage
+deploy
+docs
+node_modules
+tests
+commitlint.config.js
+jest.config.js
