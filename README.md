@@ -108,7 +108,47 @@ Run the server and go to `/docs` for OpenAPI Documentation, it points to `http:/
 You can also [click here](./docs/postman.json) to open `postman.json` for Postman collection.
 
 ## How It Works
+### Register
 
+```mermaid
+graph TD;
+    A((Start)) --> B[/Username, Email, Password/];
+    B --> C{Valid?}; 
+    C --> |No| V((End));
+    C ---> |Yes| E{Email registered?};
+    E --> |Yes| X((End));
+    E ---> |No| F{Username taken?};
+    F --> |Yes| Y((End));
+    F ---> |No| G[(Insert into DB)];
+    G --> Z((End));
+```
+### Login
+
+```mermaid
+graph TD;
+    A((Start)) --> B[/Username, Password/];
+    B --> C{Valid?}; 
+    C --> |No| D((End));
+    C ---> |Yes| E[(Read in DB)];
+    E --> F{User registered?};
+    F --> |No| G((End));
+    F ---> |Yes| H{Password match?}
+    H --> |No| I((End));
+    H --> |Yes| J[Create authorization token]
+    J --> K((End))
+```
+
+### Get Profile
+
+### Create User
+
+### Read Users (collection)
+
+### Read User (single)
+
+### Update User
+
+### Delete User
 ## Deployment
 
 ### Dependencies
