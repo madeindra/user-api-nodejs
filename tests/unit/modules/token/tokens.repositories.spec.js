@@ -1,6 +1,3 @@
-// import mock
-const { mockRequest, mockResponse } = require('../../../mock');
-
 const tokenRepository = require('../../../../modules/tokens/tokens.repositories');
 
 const db = require('../../../../libs/db');
@@ -16,13 +13,9 @@ describe('token repository', () => {
   describe('insertOne', () => {
     const document = {
       id: '5dbafa36-c300-4896-85dc-5a8cb1ff7da2',
-      email: 'user@usedeall.com',
-      username: 'user',
-      roles: ['user'],
-      isDeleted: false,
-      isVerified: true,
-      createdAt: new Date('01-01-2000'),
-      updatedAt: new Date('01-01-2000'),
+      token: 'jwtrefreshtoken',
+      isInvalid: false,
+      invalidatedAt: null,
     }
 
     const result = {
@@ -39,25 +32,21 @@ describe('token repository', () => {
   });
 
   describe('findOne', () => {
-    const document = {
+    const condition = {
       id: '5dbafa36-c300-4896-85dc-5a8cb1ff7da2',
     }
 
     const result = {
       id: '5dbafa36-c300-4896-85dc-5a8cb1ff7da2',
-      email: 'user@usedeall.com',
-      username: 'user',
-      roles: ['user'],
-      isDeleted: false,
-      isVerified: true,
-      createdAt: new Date('01-01-2000'),
-      updatedAt: new Date('01-01-2000'),
+      token: 'jwtrefreshtoken',
+      isInvalid: false,
+      invalidatedAt: null,
     }
 
     test('succeed', async () => {
       db.findOne.mockResolvedValueOnce(result);
 
-      const res = await tokenRepository.findOne(document);
+      const res = await tokenRepository.findOne(condition);
 
       expect(res).toEqual(result);
     });
