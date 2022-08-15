@@ -25,6 +25,7 @@ const CODE = Object.freeze({
 
 // response message
 const MESSAGE = Object.freeze({
+  SERVER_OK: 'Server is operating properly.',
   GENERAL: 'Operation successful.',
   FAILED: 'Operation failed.',
   ERROR: 'An error occured.',

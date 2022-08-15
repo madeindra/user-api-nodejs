@@ -1,9 +1,12 @@
+// import dependencies
+const wrap = require('../../libs/wrap');
+const response = require('../../libs/response');
+const { CODE, MESSAGE } = require('../../libs/constant');
+
 // ping handler
 function ping(req, res) {
-  return res.status(200).json({
-    success: true,
-    message: 'Server is operating properly.',
-  });
+  const result = wrap.result(CODE.OK, MESSAGE.SERVER_OK);
+  return response.send(res, result);
 }
 
 module.exports = {
