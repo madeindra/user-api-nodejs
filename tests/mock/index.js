@@ -1,10 +1,11 @@
 // mock request with custom data
-function mockRequest(body, header, params, query){
+function mockRequest(body, user, header, params, query){
   return {
     body,
+    user,
     header,
     params,
-    query
+    query,
   }
 }
 
