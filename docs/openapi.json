@@ -2950,7 +2950,7 @@
                       "createdAt": "2022-08-13T04:44:46.188Z",
                       "updatedAt": "2022-08-13T04:44:46.188Z",
                       "id": "fa3d6fba-4b78-4680-a250-ae0545096088",
-                      "password": "REDACTED PASSWORD"
+                      "password": "PASSWORD REDACTED"
                     },
                     {
                       "username": "amazinguser",
@@ -2964,7 +2964,7 @@
                       "createdAt": "2022-08-14T15:02:32.001Z",
                       "updatedAt": "2022-08-14T15:42:05.783Z",
                       "id": "8f8f148a-5abf-4cf1-88a1-aec89ee110e3",
-                      "password": "REDACTED PASSWORD"
+                      "password": "PASSWORD REDACTED"
                     },
                     {
                       "email": "newuser@usedeall.com",
@@ -2977,7 +2977,7 @@
                       "createdAt": "2022-08-14T15:42:13.436Z",
                       "updatedAt": "2022-08-14T15:42:13.436Z",
                       "id": "7d71a5af-02f0-4138-bc87-0b5b1d1e5e82",
-                      "password": "REDACTED PASSWORD"
+                      "password": "PASSWORD REDACTED"
                     }
                   ],
                   "meta": {

@@ -1,6 +1,6 @@
 const userService = require('../../../../modules/users/users.services');
 const userRepository = require('../../../../modules/users/users.repositories');
-const validation = require('../../../../modules/tokens/tokens.validations');
+const validation = require('../../../../modules/users/users.validations');
 
 const crypt = require('../../../../libs/crypt');
 const jwt = require('../../../../libs/jwt');
@@ -19,7 +19,7 @@ jest.mock('../../../../modules/users/users.repositories', () => ({
 );
 
 // mock validation
-jest.mock('../../../../modules/tokens/tokens.validations', () => ({
+jest.mock('../../../../modules/users/users.validations', () => ({
   register: {
     validate: jest.fn(),
   },
@@ -119,6 +119,42 @@ describe('user service', () => {
         refreshToken: 'refreshtoken',
       }
       expect(res).toEqual(wrap.result(CODE.OK, MESSAGE.LOGIN_SUCCESS, expected))
+    })
+  });
+
+  describe('getProfile', () => {
+    const user = {
+      _id: '5dbafa36-c300-4896-85dc-5a8cb1ff7da2',
+    };
+  
+    const userReturn = {
+      _id: '5dbafa36-c300-4896-85dc-5a8cb1ff7da2',
+      email: 'user@usedeall.com',
+      username: 'user',
+      password: 'hashedsecret',
+      roles: ['user'],
+      isDeleted: false,
+      isVerified: true,
+      createdAt: new Date('01-01-2000'),
+      updatedAt: new Date('01-01-2000'),
+    };
+
+    test('succeed', async () => {
+      userRepository.findOne.mockResolvedValueOnce(userReturn);
+      
+      const res = await userService.getProfile(user);
+
+      const expected = {
+        id: '5dbafa36-c300-4896-85dc-5a8cb1ff7da2',
+        email: 'user@usedeall.com',
+        username: 'user',
+        roles: ['user'],
+        isDeleted: false,
+        isVerified: true,
+        createdAt: new Date('01-01-2000'),
+        updatedAt: new Date('01-01-2000'),
+      }
+      expect(res).toEqual(wrap.result(CODE.OK, MESSAGE.GENERAL, expected))
     })
   });
 });
