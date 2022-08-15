@@ -9,7 +9,8 @@
     "test": "jest --passWithNoTests",
     "lint": "eslint .",
     "fix": "eslint . --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build": "docker build -f ./deploy/Dockerfile . -t madeindra/deall"
   },
   "repository": {
     "type": "git",
