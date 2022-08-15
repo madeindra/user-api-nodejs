@@ -139,6 +139,17 @@ graph TD;
 ```
 
 ### Get Profile
+```mermaid
+graph TD;
+    A((Start)) --> B[/JWT/];
+    B --> C{Valid?}; 
+    C --> |No| D((End));
+    C ---> |Yes| E[(Read in DB)];
+    E --> F{User Exist?};
+    F --> |No| G((End));
+    F ---> |Yes| H[Send profile data]
+    H --> I((End))
+```
 
 ### Create User
 
