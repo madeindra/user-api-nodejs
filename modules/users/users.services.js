@@ -102,6 +102,11 @@ async function login(body) {
     throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.CREDENTIAL_INVALID);
   }
 
+  // if user is deleted
+  if (existing?.isDeleted) {
+    throw wrap.result(CODE.UNAUTHORIZED, MESSAGE.CANNOT_LOGIN);
+  }
+
   // deconstruct user data
   const {
     _id, email, roles, isDeleted, isVerified, createdAt, updatedAt, password: hashed,
@@ -475,6 +480,9 @@ async function deleteUser(id) {
   } catch (err) {
     throw wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.DATABASE_FAILED);
   }
+
+  // return response
+  return wrap.result(CODE.OK, MESSAGE.GENERAL);
 }
 
 async function migrate() {
