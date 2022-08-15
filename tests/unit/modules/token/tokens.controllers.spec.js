@@ -37,7 +37,7 @@ describe('token controller', () => {
       refreshToken: 'newRefreshToken',
     }
 
-    test('success', async () => {
+    test('succeed', async () => {
       tokenService.refresh.mockResolvedValueOnce(wrap.result(CODE.OK, MESSAGE.GENERAL, result));
 
       await tokenController.refresh(req, res);
@@ -47,6 +47,18 @@ describe('token controller', () => {
         success: true,
         message: MESSAGE.GENERAL,
         data: result
+      });
+    })
+
+    test('failed', async () => {
+      tokenService.refresh.mockRejectedValueOnce(wrap.result(CODE.INTERNAL_SERVER_ERROR, MESSAGE.FAILED));
+
+      await tokenController.refresh(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(CODE.INTERNAL_SERVER_ERROR);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: MESSAGE.FAILED,
       });
     })
   });
