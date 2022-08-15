@@ -40,6 +40,7 @@ const MESSAGE = Object.freeze({
   UNAUTHORIZED: 'Unauthorized access.',
   ROUTE_NOT_FOUND: 'Route not found.',
   USER_NOT_EXIST: 'User does not exist.',
+  CANNOT_LOGIN: 'This user cannot be used.',
 });
 
 module.exports = {
