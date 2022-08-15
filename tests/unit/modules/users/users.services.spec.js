@@ -55,10 +55,33 @@ jest.mock('../../../../libs/uuid', () => ({
 );
 
 describe('user service', () => {
+  describe('register', () => {
+    const body = {
+      email: 'user@usedeall.com',
+      username: 'user',
+      password: 'supersecret'
+    };
+  
+    const validationReturn = { error: null };
+
+    test('succeed', async () => {
+      validation.register.validate.mockReturnValueOnce(validationReturn);
+      userRepository.findOne.mockResolvedValueOnce(null);
+      userRepository.findOne.mockResolvedValueOnce(null);
+      uuid.generate.mockReturnValueOnce('5dbafa36-c300-4896-85dc-5a8cb1ff7da2');
+      crypt.compare.mockResolvedValueOnce(true);
+      userRepository.insertOne.mockResolvedValueOnce(null);
+
+      const res = await userService.register(body);
+
+      expect(res).toEqual(wrap.result(CODE.CREATED, MESSAGE.REGISTRATION_SUCCESS))
+    })
+  });
+
   describe('login', () => {
     const body = {
       username: 'user',
-      password: 'hashedsecret'
+      password: 'supersecret'
     };
   
     const validationReturn = { error: null };
