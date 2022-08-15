@@ -30,6 +30,14 @@ npm start
 
 6. Migrate admin credential by accessing `/migrate` endpoints in your browser or postman with `GET` method.
 
+### Development 
+
+After running `npm install`, install husky to force pre-commit hook by running this command
+
+```
+npm prepare
+```
+
 ### Admin Credential
 
 This is the default user credentials
@@ -49,6 +57,7 @@ If you want to update it, [click here](./migrations/admin.json) to open `admin.j
 - **deploy**: deployment files (docker, k8s).
 - **docs**: server documentations (API docs & others).
 - **libs**: libraries used in the sources.
+- **migrations**: admin account migration file.
 - **middlewares**: middlewares for routes.
 - **modules**: sources for api handling.
 - **routes**: api routes.
