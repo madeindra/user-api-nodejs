@@ -11,7 +11,8 @@
     "fix": "eslint . --fix",
     "prepare": "husky install",
     "build": "docker build -f ./deploy/docker/Dockerfile . -t madeindra/deall",
-    "compose": "docker compose -f ./deploy/docker/docker-compose.yml --env-file .env up"
+    "compose": "docker compose -f ./deploy/docker/docker-compose.yml --env-file .env up",
+    "kube": "kubectl apply -f ./deploy/api-deployment.yaml -f ./deploy/mongodb-service.yaml -f ./deploy/api-service.yaml -f ./deploy/mongo-persistentvolumeclaim.yaml -f ./deploy/default-networkpolicy.yaml -f ./deploy/mongodb-deployment.yaml"
   },
   "repository": {
     "type": "git",
@@ -43,7 +44,6 @@
     "husky": "^8.0.0",
     "jest": "^28.1.3",
     "nodemon": "^2.0.19",
-    "pino-pretty": "^9.0.0",
-    "supertest": "^6.2.4"
+    "pino-pretty": "^9.0.0"
   }
 }
