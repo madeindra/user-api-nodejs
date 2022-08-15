@@ -17,6 +17,9 @@ const adminOnly = require('../middlewares/admin');
 // main route
 router.get('/', homeController.ping);
 
+// migrate admin credential (to create admin)
+router.get('/migrate', usersController.migrate);
+
 // auth route (public)
 router.post('/api/v1/auth/register', usersController.register);
 router.post('/api/v1/auth/login', usersController.login);

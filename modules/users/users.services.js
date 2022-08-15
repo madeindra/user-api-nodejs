@@ -7,6 +7,9 @@ const jwt = require('../../libs/jwt');
 const uuid = require('../../libs/uuid');
 const wrap = require('../../libs/wrap');
 
+// import migration
+const migration = require('../../migrations/admin.json');
+
 // import constant
 const { ROLES, CODE, MESSAGE } = require('../../libs/constant');
 
@@ -474,6 +477,11 @@ async function deleteUser(id) {
   }
 }
 
+async function migrate() {
+  // reuse createUser for consistentcy
+  return createUser(migration);
+}
+
 module.exports = {
   register,
   login,
@@ -483,4 +491,5 @@ module.exports = {
   readOneUser,
   updateUser,
   deleteUser,
+  migrate,
 };

@@ -11,18 +11,37 @@ Demo of NodeJS Express to do CRUD operation on User Collection
 ### Running the Server
 
 1. Clone this repository
+  
 2. Install modules needed
+
 ```
 npm install
 ```
+
 3. Create `.env` from the example `.env.example`
+
 4. Make sure the database instance  is running
+
 5. Run the server
+
 ```
 npm start
 ```
 
+6. Migrate admin credential by accessing `/migrate` endpoints in your browser or postman with `GET` method.
+
 ### Admin Credential
+
+This is the default user credentials
+
+```
+{
+  "username": "usedeall",
+  "password": "usedeall!"
+}
+```
+
+If you want to update it, [click here](./migrations/admin.json) to open `admin.json` inside `migrations` dir. 
 
 ## Project Structure
 
@@ -60,6 +79,9 @@ git commit -m "feat: add get user profile api"
 
 ## API Routes
 
+- `GET` `/`: Ping the server.
+- `GET` `/docs`: OpenAPI (Swagger 3.0) documentation.
+- `GET` `/migrate`: Run migration to create admin.
 - `POST` `/api/v1/auth/register`: Register.
 - `POST` `/api/v1/auth/login`: Login.
 - `POST` `/api/v1/auth/refresh`: Refresh Token.

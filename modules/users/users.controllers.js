@@ -130,6 +130,19 @@ async function deleteUser(req, res) {
   return response.send(res, result);
 }
 
+async function migrate(_req, res) {
+  // pass to service
+  let result;
+  try {
+    result = await service.migrate();
+  } catch (err) {
+    return response.send(res, err);
+  }
+
+  // return result
+  return response.send(res, result);
+}
+
 module.exports = {
   register,
   login,
@@ -139,4 +152,5 @@ module.exports = {
   readOneUser,
   updateUser,
   deleteUser,
+  migrate,
 };
