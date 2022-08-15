@@ -171,21 +171,48 @@ graph TD;
 ```
 
 ### Read Users (collection)
+```mermaid
+graph TD;
+    A((Start)) --> B[/Sort, Page, Limit, JWT/];
+    B --> C{Authorized?}; 
+    C --> |No| D((End));
+    C ---> |Yes| E[(Read in DB)];
+    E --> F[Send response]
+    F --> G((End))
+```
 
 ### Read User (single)
 ```mermaid
 graph TD;
-    A((Start)) --> B[/JWT/];
+    A((Start)) --> B[/UserID, JWT/];
     B --> C{Authorized?}; 
     C --> |No| D((End));
     C ---> |Yes| E[(Read in DB)];
-    E --> F{User Exist?};
+    E --> F{User rxist?};
     F --> |No| G((End));
     F ---> |Yes| H[Send response]
     H --> I((End))
 ```
 
 ### Update User
+```mermaid
+graph TD;
+    A((Start)) --> B[/UserId, Username, Email, Password, Role, Delete, Verify, JWT/];
+    B --> C{Authorized?}; 
+    C --> |No| D((End));
+    C ---> |Yes| E{Request body valid?};
+    E --> |No| F((End));
+    E ---> |Yes| G[(Read in DB)]
+    G --> H{User exist}
+    H --> |No| I((End));
+    H ---> |Yes| J{Email registered?};
+    J --> |Yes| K((End));
+    J ---> |No| L{Username taken?};
+    L --> |Yes| M((End));
+    L ---> |No| N[(Update into DB)];
+    N --> O[Send response]
+    O --> P((End));
+```
 
 ### Delete User
 ```mermaid
