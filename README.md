@@ -111,8 +111,17 @@ You can also [click here](./docs/postman.json) to open `postman.json` for Postma
 
 ## Deployment
 
-Kubernets (k8s) configs are stored in [deploy](./deploy/) directory.
+### Dependencies
+- Docker
+- Docker Compose (docker compose)
+- Kubernetes (kubectl)
+
+### Configurations
+
+Kubernetes (k8s) configs are stored in [deploy](./deploy/) directory.
 
 To build docker image, use `npm run build` command.
 
 To the image with compose, use `npm run compose` command.
+
+To apply k8s configs, use `npm run kube` command.
