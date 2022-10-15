@@ -8,6 +8,12 @@ const { db } = require('../env');
 let client;
 let conn;
 
+const transactionOptions = {
+  readConcern: { level: 'snapshot' },
+  writeConcern: { w: 'majority' },
+  readPreference: 'primary',
+};
+
 // database init functions
 async function init() {
   client = new MongoClient(db.uri);
@@ -27,23 +33,23 @@ function get() {
 }
 
 // inser one in collection
-function insertOne(collection = '', document = {}, options = {}) {
-  return conn.collection(collection).insert({ ...document }, { ...options });
+function insertOne(collection = '', document = {}, options = {}, session = null) {
+  return conn.collection(collection).insertOne({ ...document }, { ...options, session });
 }
 
 // inser many in collection
-function insertMany(collection = '', documents = [], options = {}) {
-  return conn.collection(collection).insertMany([...documents], { ...options });
+function insertMany(collection = '', documents = [], options = {}, session = null) {
+  return conn.collection(collection).insertMany([...documents], { ...options, session });
 }
 
 // find one in collection
-function findOne(collection = '', condition = {}, options = {}) {
-  return conn.collection(collection).findOne({ ...condition }, { ...options });
+function findOne(collection = '', condition = {}, options = {}, session = null) {
+  return conn.collection(collection).findOne({ ...condition }, { ...options, session });
 }
 
 // find many in collection
-function findMany(collection = '', condition = {}, options = {}) {
-  return conn.collection(collection).find({ ...condition }, { ...options }).toArray();
+function findMany(collection = '', condition = {}, options = {}, session = null) {
+  return conn.collection(collection).find({ ...condition }, { ...options, session }).toArray();
 }
 
 // find with offset in collection
@@ -56,23 +62,50 @@ function findOffset(collection = '', condition = {}, options = {}, sort = { _id:
 }
 
 // update one in collection
-function updateOne(collection = '', condition = {}, updateDoc = {}, options = {}) {
-  return conn.collection(collection).updateOne({ ...condition }, { ...updateDoc }, { ...options });
+function updateOne(collection = '', condition = {}, updateDoc = {}, options = {}, session = null) {
+  return conn.collection(collection)
+    .updateOne({ ...condition }, { ...updateDoc }, { ...options, session });
 }
 
 // update many in collection
-function updateMany(collection = '', condition = {}, updateDoc = {}, options = {}) {
-  return conn.collection(collection).updateMany({ ...condition }, { ...updateDoc }, { ...options });
+function updateMany(collection = '', condition = {}, updateDoc = {}, options = {}, session = null) {
+  return conn.collection(collection)
+    .updateMany({ ...condition }, { ...updateDoc }, { ...options, session });
 }
 
 // delete one in collection
-function deleteOne(collection = '', condition = {}, options = {}) {
-  return conn.collection(collection).deleteOne({ ...condition }, { ...options });
+function deleteOne(collection = '', condition = {}, options = {}, session = null) {
+  return conn.collection(collection).deleteOne({ ...condition }, { ...options, session });
 }
 
 // delete many in collection
-function deleteMany(collection = '', condition = {}, options = {}) {
-  return conn.collection(collection).deleteMany({ ...condition }, { ...options });
+function deleteMany(collection = '', condition = {}, options = {}, session = null) {
+  return conn.collection(collection).deleteMany({ ...condition }, { ...options, session });
+}
+
+// start session for transaction
+function startSession() {
+  return client.startSession();
+}
+
+// end session for transaction
+function endSession(session) {
+  return session.endSession();
+}
+
+// begin transaction
+function startTransaction(session) {
+  return session.startTransaction(transactionOptions);
+}
+
+// commit transaction
+function commitTransaction(session) {
+  return session.commitTransaction();
+}
+
+// rollback transaction
+function abortTransaction(session) {
+  return session.abortTransaction();
 }
 
 module.exports = {
@@ -88,4 +121,9 @@ module.exports = {
   updateMany,
   deleteOne,
   deleteMany,
+  startSession,
+  endSession,
+  startTransaction,
+  commitTransaction,
+  abortTransaction,
 };
