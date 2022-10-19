@@ -1,7 +1,8 @@
 coverage
 deploy
+dist
 docs
 node_modules
 tests
 commitlint.config.js
-jest.config.js
+jest.config.ts
